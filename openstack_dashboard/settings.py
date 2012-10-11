@@ -55,7 +55,7 @@ HORIZON_CONFIG = {
     'default_dashboard': 'project',
     'user_home': 'horizon.views.base.get_user_home',
     'ajax_queue_limit': 10,
-    'help_url': "http://docs.openstack.org",
+    'help_url': "http://go.sisyun.com",
     'exceptions': {'recoverable': exceptions.RECOVERABLE,
                    'not_found': exceptions.NOT_FOUND,
                    'unauthorized': exceptions.UNAUTHORIZED},
@@ -138,22 +138,10 @@ SESSION_COOKIE_SECURE = False
 
 gettext_noop = lambda s: s
 LANGUAGES = (
-    ('bg', gettext_noop('Bulgarian (Bulgaria)')),
-    ('cs', gettext_noop('Czech')),
     ('en', gettext_noop('English')),
-    ('es', gettext_noop('Spanish')),
-    ('fr', gettext_noop('French')),
-    ('it', gettext_noop('Italiano')),
-    ('ja', gettext_noop('Japanese')),
-    ('ko', gettext_noop('Korean (Korea)')),
-    ('nl', gettext_noop('Dutch (Netherlands)')),
-    ('pl', gettext_noop('Polish')),
-    ('pt', gettext_noop('Portuguese')),
-    ('pt-br', gettext_noop('Portuguese (Brazil)')),
     ('zh-cn', gettext_noop('Simplified Chinese')),
-    ('zh-tw', gettext_noop('Traditional Chinese')),
 )
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'zh-cn'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
