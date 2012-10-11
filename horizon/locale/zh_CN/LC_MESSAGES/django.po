@@ -3551,8 +3551,6 @@ msgid_plural "Displaying %(content_items)s items"
 msgstr[0] "显示 %(counter)s 个条目"
 msgstr[1] "显示 %(counter)s 个条目"
 
-#: templates/horizon/common/_sidebar.html:14
-#, fuzzy
 msgid "Current Project"
 msgstr "创建项目"
 

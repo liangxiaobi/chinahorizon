@@ -23,6 +23,7 @@ import os
 import sys
 
 from openstack_dashboard import exceptions
+from django.utils.translation import ugettext_lazy as _
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 BIN_DIR = os.path.abspath(os.path.join(ROOT_PATH, '..', 'bin'))
@@ -33,7 +34,7 @@ if ROOT_PATH not in sys.path:
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-SITE_BRANDING = 'OpenStack Dashboard'
+SITE_BRANDING = _('Syscloud Control Panel')
 
 LOGIN_URL = '/auth/login/'
 LOGOUT_URL = '/auth/logout/'

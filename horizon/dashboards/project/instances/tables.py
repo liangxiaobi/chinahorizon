@@ -34,19 +34,19 @@ from .tabs import InstanceDetailTabs, LogTab, VNCTab
 
 LOG = logging.getLogger(__name__)
 
-ACTIVE_STATES = ("ACTIVE",)
+ACTIVE_STATES = (_("ACTIVE"),)
 
 POWER_STATES = {
-    0: "NO STATE",
-    1: "RUNNING",
-    2: "BLOCKED",
-    3: "PAUSED",
-    4: "SHUTDOWN",
-    5: "SHUTOFF",
-    6: "CRASHED",
-    7: "SUSPENDED",
-    8: "FAILED",
-    9: "BUILDING",
+    0: _("NO STATE"),
+    1: _("RUNNING"),
+    2: _("BLOCKED"),
+    3: _("PAUSED"),
+    4: _("SHUTDOWN"),
+    5: _("SHUTOFF"),
+    6: _("CRASHED"),
+    7: _("SUSPENDED"),
+    8: _("FAILED"),
+    9: _("BUILDING"),
 }
 
 PAUSE = 0

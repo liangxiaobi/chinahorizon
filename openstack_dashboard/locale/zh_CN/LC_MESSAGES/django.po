@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: openstack-dashboard\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-29 11:47-0700\n"
-"PO-Revision-Date: 2012-09-27 17:57+0800\n"
+"PO-Revision-Date: 2012-10-11 14:01+0800\n"
 "Last-Translator: Shawn Liang <11315889@qq.com>\n"
 "Language-Team: 汉语 <11315889@qq.com>\n"
 "Language: Simplified Chinese\n"
@@ -64,20 +64,12 @@ msgstr "允许 %(from)s：%(to)s 从 %(cidr)s"
 msgid "Manage Compute"
 msgstr "管理计算节点"
 
-#: dashboards/nova/dashboard.py:33
 msgid "Object Store"
 msgstr "对象仓库"
 
-#: dashboards/nova/dashboard.py:38
-#: dashboards/nova/instances_and_volumes/instances/workflows.py:33
-#: dashboards/syspanel/projects/tables.py:51
-#: templates/horizon/common/_sidebar.html:11
-#: tests/workflows_tests.py:39
 msgid "Project"
 msgstr "项目"
 
-#: dashboards/nova/access_and_security/panel.py:25
-#: dashboards/nova/instances_and_volumes/instances/workflows.py:311
 msgid "Access & Security"
 msgstr "访问与安全"
 
@@ -193,9 +185,6 @@ msgstr "所属IP池"
 msgid "No floating IP pools available."
 msgstr "无有效的公网IP池"
 
-#: dashboards/nova/access_and_security/keypairs/forms.py:38
-#: dashboards/nova/access_and_security/keypairs/forms.py:57
-#: dashboards/nova/access_and_security/keypairs/tables.py:51
 msgid "Keypair Name"
 msgstr "密钥对名称"
 
@@ -230,10 +219,6 @@ msgstr "密钥对"
 msgid "Keypairs"
 msgstr "密钥对"
 
-#: dashboards/nova/access_and_security/keypairs/tables.py:38
-#: dashboards/nova/templates/nova/access_and_security/keypairs/_import.html:7
-#: dashboards/nova/templates/nova/access_and_security/keypairs/_import.html:23
-#: dashboards/nova/templates/nova/access_and_security/keypairs/import.html:6
 msgid "Import Keypair"
 msgstr "导入密钥对"
 
@@ -253,20 +238,6 @@ msgstr "指纹"
 msgid "Unable to create keypair: %(exc)s"
 msgstr "无法创建密钥对：%(exc)s"
 
-#: dashboards/nova/access_and_security/security_groups/forms.py:41
-#: dashboards/nova/access_and_security/security_groups/tables.py:57
-#: dashboards/nova/images_and_snapshots/images/forms.py:43
-#: dashboards/nova/instances_and_volumes/volumes/tables.py:110
-#: dashboards/nova/instances_and_volumes/volumes/tables.py:127
-#: dashboards/nova/templates/nova/images_and_snapshots/images/_detail_overview.html:9
-#: dashboards/nova/templates/nova/instances_and_volumes/instances/_detail_overview.html:9
-#: dashboards/nova/templates/nova/instances_and_volumes/instances/_launch_details_help.html:9
-#: dashboards/nova/templates/nova/instances_and_volumes/volumes/_detail_overview.html:9
-#: dashboards/syspanel/flavors/forms.py:37
-#: dashboards/syspanel/projects/forms.py:60
-#: dashboards/syspanel/projects/forms.py:85
-#: dashboards/syspanel/projects/tables.py:74
-#: dashboards/syspanel/services/tables.py:38
 msgid "Name"
 msgstr "名称"
 
@@ -302,9 +273,6 @@ msgstr "TCP/UDP：输入介于1到65535之间的整数。ICMP：输入区间（-
 msgid "Type"
 msgstr "类型"
 
-#: dashboards/nova/access_and_security/security_groups/forms.py:74
-#: dashboards/nova/access_and_security/security_groups/forms.py:80
-#: dashboards/nova/access_and_security/security_groups/tables.py:95
 msgid "To Port"
 msgstr "至端口"
 
@@ -899,6 +867,15 @@ msgstr "云主机数量"
 
 msgid "Number of instances to launch."
 msgstr "启动的云主机数目"
+
+msgid "Number of Instances"
+msgstr "云主机数量"
+
+msgid "Number of VCPUs"
+msgstr "VCPU数量"
+
+msgid "Total RAM"
+msgstr "内存总数"
 
 msgid "Details"
 msgstr "详情"
@@ -2493,7 +2470,7 @@ msgstr "退出"
 msgid "Help"
 msgstr "帮助"
 
-msgid "CURRENT PROJECT"
+msgid "Current Project"
 msgstr "当前项目"
 
 msgid "Networks"
@@ -2600,4 +2577,34 @@ msgstr "为启动镜像设置的最小磁盘。如果不指定， 默认值为�
 
 msgid "Launch Instance"
 msgstr "启动云主机"
+
+msgid "NO STATE"
+msgstr "无状态"
+
+msgid "RUNNING"
+msgstr "运行中"
+
+msgid "BLOCKED"
+msgstr "卡住"
+
+msgid "PAUSED"
+msgstr "暂停"
+
+msgid "SHUTDOWN"
+msgstr "关闭"
+
+msgid "SHUTOFF"
+msgstr "断电"
+
+msgid "CRASHED"
+msgstr "损坏"
+
+msgid "SUSPENDED"
+msgstr "暂停"
+
+msgid "FAILED"
+msgstr "失败"
+
+msgid "BUILDING"
+msgstr "创建中"
 
