@@ -21,3 +21,56 @@
 """
 Stub file to work around django bug: https://code.djangoproject.com/ticket/7198
 """
+
+from django.db import models
+
+class bill_regions(models.Model):
+    name =models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+
+class bill_items(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+
+class bill_payment_types(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    interval_unit =models.CharField(max_length=200)
+    interval_size = models.IntegerField()
+    is_prepaid = models.IntegerField()
+
+class bill_products(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    region_id=models.IntegerField()
+    item_id=models.IntegerField()
+    payment_type_id =models.IntegerField()
+    order_unit = models.CharField(max_length=200)
+    order_size = models.IntegerField()
+    price =models.FloatField()
+    currency=models.CharField(max_length=200)
+    
+class bill_purchases(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    instance_id =models.IntegerField()
+    quantity = models.FloatField()
+    line_total = models.FloatField()
+    flag = models.IntegerField()
+    
+    
