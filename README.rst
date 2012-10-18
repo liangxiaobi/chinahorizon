@@ -8,125 +8,97 @@ Author: Lion
 Contact Email: 11315889@qq.com
 QQ: 11315889
 
+About Horizon:
+http://github.com/openstack/horizon
 
-Horizon is a Django-based project aimed at providing a complete OpenStack
-Dashboard along with an extensible framework for building new dashboards
-from reusable components. The ``openstack_dashboard`` module is a reference
-implementation of a Django site that uses the ``horizon`` app to provide
-web-based interactions with the various OpenStack projects.
+Bill DB:
+(部分参考:https://github.com/sinacloud/dough)
 
-For release management:
-
- * https://launchpad.net/horizon
-
-For blueprints and feature specifications:
-
- * https://blueprints.launchpad.net/horizon
-
-For issue tracking:
-
- * https://bugs.launchpad.net/horizon
-
-Dependencies
-============
-
-To get started you will need to install Node.js (http://nodejs.org/) on your
-machine. Node.js is used with Horizon in order to use LESS
-(http://lesscss.org/) for our CSS needs. Horizon is currently using Node.js
-v0.6.12.
-
-For Ubuntu use apt to install Node.js::
-
-    $ sudo apt-get install nodejs
-
-For other versions of Linux, please see here:: http://nodejs.org/#download for
-how to install Node.js on your system.
-
-
-Getting Started
-===============
-
-For local development, first create a virtualenv for the project.
-In the ``tools`` directory there is a script to create one for you:
-
-  $ python tools/install_venv.py
-
-Alternatively, the ``run_tests.sh`` script will also install the environment
-for you and then run the full test suite to verify everything is installed
-and functioning correctly.
-
-Now that the virtualenv is created, you need to configure your local
-environment.  To do this, create a ``local_settings.py`` file in the
-``openstack_dashboard/local/`` directory.  There is a
-``local_settings.py.example`` file there that may be used as a template.
-
-If all is well you should able to run the development server locally:
-
-  $ tools/with_venv.sh manage.py runserver
-
-or, as a shortcut::
-
-  $ ./run_tests.sh --runserver
-
-
-Settings Up OpenStack
-=====================
-
-The recommended tool for installing and configuring the core OpenStack
-components is `Devstack`_. Refer to their documentation for getting
-Nova, Keystone, Glance, etc. up and running.
-
-.. _Devstack: http://devstack.org/
-
-.. note::
-
-    The minimum required set of OpenStack services running includes the
-    following:
-
-    * Nova (compute, api, scheduler, network, *and* volume services)
-    * Glance
-    * Keystone
-
-    Optional support is provided for Swift.
-
-
-Development
-===========
-
-For development, start with the getting started instructions above.
-Once you have a working virtualenv and all the necessary packages, read on.
-
-If dependencies are added to either ``horizon`` or ``openstack-dashboard``,
-they should be added to ``tools/pip-requires``.
-
-The ``run_tests.sh`` script invokes tests and analyses on both of these
-components in its process, and it is what Jenkins uses to verify the
-stability of the project. If run before an environment is set up, it will
-ask if you wish to install one.
-
-To run the unit tests::
-
-    $ ./run_tests.sh
-
-Building Contributor Documentation
-==================================
-
-This documentation is written by contributors, for contributors.
-
-The source is maintained in the ``doc/source`` folder using
-`reStructuredText`_ and built by `Sphinx`_
-
-.. _reStructuredText: http://docutils.sourceforge.net/rst.html
-.. _Sphinx: http://sphinx.pocoo.org/
-
-* Building Automatically::
-
-    $ ./run_tests.sh --docs
-
-* Building Manually::
-
-    $ export DJANGO_SETTINGS_MODULE=local.local_settings
-    $ python doc/generate_autodoc_index.py
-    $ sphinx-build -b html doc/source build/sphinx/html
-
-Results are in the `build/sphinx/html` directory
+#计费地区
+class bill_regions(models.Model):
+    name =models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+# 扣费项目表
+class bill_items(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+# 计费周期类型
+# is_prepaid是预付费还是后付费
+# interval_*是计费的周期
+class bill_payment_types(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    interval_unit =models.CharField(max_length=200)
+    interval_size = models.IntegerField()
+    is_prepaid = models.IntegerField()
+# 产品表
+# order_*是费用单位, payment_types.interval*不能大于products.order*
+# 目前payment_types.interval_* 和 products.order* 的时间周期必须全部一样
+# 举例：
+# payment_types.interval_*= 1 day , products.order*= 1 month, 则
+# 举例：
+# payment_types.interval_*= 1 hour , products.order*= 10Mb Bytes, 则一个小时之后产生一条 
+#           purchases.quantity/products.order_size*products.price
+# 的费用记录
+# currency是货币单位，暂时没用
+class bill_products(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    region_id=models.IntegerField()
+    item_id=models.IntegerField()
+    payment_type_id =models.IntegerField()
+    order_unit = models.CharField(max_length=200)
+    order_size = models.IntegerField()
+    price =models.FloatField()
+    currency=models.CharField(max_length=200)
+# 订单表
+# 创建resource如虚拟机的时候会生成一条记录
+# project_id是用户的tenant_id
+# resource_uuid 虚拟机的uuid或者loadblance的uuid等
+# resource_name是用户起的名字
+# expires_at是下一个计费的时间
+# status是状态，对应内部的处理函数名称
+# 资源被回收如虚拟机关闭、floatingip取消的时候会删除对应的subscriptions记录（仅标记deleted字段，不实际删除） 
+class bill_journal(models.Model):
+    name = models.CharField()
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    region_id=models.IntegerField()
+    project_id=models.CharField()
+    product_id=models.IntegerField()
+    resource_uuid=models.CharField()
+    resource_name=models.CharField()
+    expires_at =models.DateTimeField()
+    status=models.CharField()
+# 扣费记录表
+# 在每个收费点上都会生成一条记录
+# 预付费的subscriptions会在creating改变为verify的时候生成一条记录
+# 后付费的subscriptions会在从deleting变为terminated的时候生成一条记录
+# 所有verify的subscriptions的expires_at大于当前时间就会生成一条记录
+# quantity是当前计费周期内的数据量（流量单位目前为byte，floatingip等为天）
+# line_total是本次费用
+# 已经实际扣过费的记录，flag字段为1。未扣费的为0；扣费失败的为-1   
+class bill_purchases(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    instance_id =models.IntegerField()
+    quantity = models.FloatField()
+    line_total = models.FloatField()
+    flag = models.IntegerField()

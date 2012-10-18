@@ -62,6 +62,20 @@ class bill_products(models.Model):
     price =models.FloatField()
     currency=models.CharField(max_length=200)
     
+class bill_journal(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField()
+    updated_at=models.DateTimeField()
+    deleted_at=models.DateTimeField()
+    deleted = models.IntegerField()
+    region_id=models.IntegerField()
+    project_id=models.CharField(max_length=200)
+    product_id=models.IntegerField()
+    resource_uuid=models.CharField(max_length=200)
+    resource_name=models.CharField(max_length=200)
+    expires_at =models.DateTimeField()
+    status=models.CharField(max_length=200)
+    
 class bill_purchases(models.Model):
     name = models.CharField(max_length=200)
     create_at=models.DateTimeField()
@@ -72,5 +86,4 @@ class bill_purchases(models.Model):
     quantity = models.FloatField()
     line_total = models.FloatField()
     flag = models.IntegerField()
-    
     
