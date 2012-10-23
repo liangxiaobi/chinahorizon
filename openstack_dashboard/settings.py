@@ -81,6 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
     'horizon.context_processors.horizon',
+    'django.contrib.auth.context_processors.auth',
 )
 
 TEMPLATE_LOADERS = (
@@ -113,6 +114,7 @@ COMPRESS_CSS_HASHING_METHOD = 'hash'
 COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 
 INSTALLED_APPS = (
+    'django.contrib.sites',
     'openstack_dashboard',
     'django.contrib.contenttypes',
     'django.contrib.auth',
@@ -126,6 +128,7 @@ INSTALLED_APPS = (
     'horizon.dashboards.admin',
     'horizon.dashboards.settings',
     'openstack_auth',
+    'django.contrib.admin',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -146,7 +149,7 @@ LANGUAGE_CODE = 'zh-cn'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
+SITE_ID = 1
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = 'Member'
 
 DEFAULT_EXCEPTION_REPORTER_FILTER = 'horizon.exceptions.HorizonReporterFilter'

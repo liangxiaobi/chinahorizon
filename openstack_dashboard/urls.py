@@ -1,4 +1,10 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
+from django.conf import settings
+from django.conf.urls.defaults import patterns, url, include
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import horizon
 
 # Copyright 2012 United States Government as represented by the
 # Administrator of the National Aeronautics and Space Administration.
@@ -22,18 +28,15 @@
 URL patterns for the OpenStack Dashboard.
 """
 
-from django.conf.urls.defaults import patterns, url, include
-from django.conf.urls.static import static
-from django.conf import settings
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-import horizon
 
 
 urlpatterns = patterns('',
     url(r'^$', 'horizon.views.splash', name='splash'),
     url(r'^auth/', include('openstack_auth.urls')),
-    url(r'', include(horizon.urls)))
+    url(r'', include(horizon.urls)),
+    url(r'^admincp/', include(admin.site.urls)),
+    )
 
 # Development static app and project media serving using the staticfiles app.
 urlpatterns += staticfiles_urlpatterns()

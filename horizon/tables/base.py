@@ -779,7 +779,7 @@ class DataTableOptions(object):
 
 class DataTableMetaclass(type):
     """ Metaclass to add options to DataTable class and collect columns. """
-    def __new__(mcs, name, bases, attrs):
+    def __new__(self,mcs, name, bases, attrs):
         # Process options from Meta
         class_name = name
         attrs["_meta"] = opts = DataTableOptions(attrs.get("Meta", None))
@@ -1084,7 +1084,7 @@ class DataTable(object):
         return row_actions_template.render(context)
 
     @staticmethod
-    def parse_action(action_string):
+    def parse_action(action_string): 
         """
         Parses the ``action`` parameter (a string) sent back with the
         POST data. By default this parses a string formatted as

@@ -87,3 +87,15 @@ class bill_purchases(models.Model):
     line_total = models.FloatField()
     flag = models.IntegerField()
     
+class bills(models.Model):
+    name = models.CharField(max_length=200)
+    create_at=models.DateTimeField(auto_now=True)
+    updated_at=models.DateTimeField(null=True)
+    deleted_at=models.DateTimeField(null=True)
+    deleted = models.BooleanField(default=False)
+    region=models.CharField(max_length=200)
+    payment_type =models.CharField(max_length=200)
+    order_unit = models.CharField(max_length=200)
+    order_size = models.IntegerField()
+    price =models.FloatField()
+    enabled=models.BooleanField(default=True)
