@@ -1,19 +1,65 @@
 {% load i18n sizeformat %}
 
 <div class="usage_info_wrapper">
-  <form action="" method="get" id="date_form" class="form-horizontal">
-    <h3>{% trans "Select a month to query its usage" %}: </h3>
-    <div class="form-row">
-      {{ form.month }}
-      {{ form.year }}
-      <button class="btn btn-small" type="submit">{% trans "Submit" %}</button>
-    </div>
-  </form>
+	<form action="" method="get" id="date_form" class="form-horizontal">
+		<h3>{% trans "Select a month to query its usage" %}:</h3>
+		<div class="form-row">
+			{{ form.month }} {{ form.year }}
+			<button class="btn btn-small" type="submit">{% trans "Submit" %}</button>
+		</div>
+	</form>
 
-  <p id="activity">
-    <span><strong>{% trans "Active Instances" %}:</strong> {{ usage.summary.instances|default:'-' }}</span>
-    <span><strong>{% trans "Active RAM" %}:</strong> {{ usage.summary.memory_mb|mbformat|default:'-' }}</span>
-    <span><strong>{% trans "This Month's VCPU-Hours" %}:</strong> {{ usage.summary.vcpu_hours|floatformat:2|default:'-' }}</span>
-    <span><strong>{% trans "This Month's GB-Hours" %}:</strong> {{ usage.summary.disk_gb_hours|floatformat:2|default:'-' }}</span>
-  </p>
+	<p id="activity">
+		<span><strong>{% trans "Active Instances" %}:</strong> {{ usage.summary.instances|default:'-' }}</span> 
+		<span><strong>{% trans "Active RAM" %}:</strong> {{ usage.summary.memory_mb|mbformat|default:'-' }}</span>
+		 <span><strong>{% trans "This Month's VCPU-Hours" %}:</strong> {{usage.summary.vcpu_hours|floatformat:2|default:'-' }}</span> 
+		 <span><strong>{% trans "This Month's GB-Hours" %}:</strong> {{ usage.summary.disk_gb_hours|floatformat:2|default:'-' }}</span>
+	</p>
+	<div class="table_wrapper">
+	<table class="table table-bordered table-striped">
+		<thead>
+		<tr class='table_caption'>
+        <th class='table_header' colspan='4'>
+          <h3 class='table_title'>{% trans "Bill Information" %}</h3>
+          </th>
+          </tr>
+			<tr>
+				<th class='sortable normal_column' >{% trans "Bill Items" %}</th>
+				<th class='sortable normal_column' >{% trans "Price (yuan per hour)" %}</th>
+				<th class='sortable normal_column' >{% trans "Total Time (hour)" %}</th>
+				<th class='sortable normal_column' >{% trans "Total Charge (RMB Yuan)" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>{% trans "VCPU" %}</td>
+			<td>{{ usage.summary.vcpu_bill|floatformat:3|default:'-' }}</td>
+			<td>{{ usage.summary.vcpu_hours|floatformat:2|default:'-' }}</td>
+			<td>{{ usage.summary.vcpu_charge|floatformat:2|default:'-' }}</td>
+		</tr>
+		<tr>
+			<td>{% trans "RAM" %}</td>
+			<td>{{ usage.summary.memory_bill|floatformat:3|default:'-' }}</td>
+			<td>{{ usage.summary.memory_gb_hours|floatformat:2|default:'-' }}</td>
+			<td>{{ usage.summary.memory_charge|floatformat:2|default:'-' }}</td>
+		</tr>
+
+		<tr>
+			<td>{% trans "DISK" %}</td>
+			<td>{{ usage.summary.disk_bill|floatformat:3|default:'-' }}</td>
+			<td>{{ usage.summary.disk_gb_hours|floatformat:2|default:'-' }}</td>
+			<td>{{ usage.summary.disk_charge|floatformat:2|default:'-' }}</td>
+		</tr>
+		</tbody>
+		 <tfoot>
+		<tr>
+			<td>{% trans "Sum" %}</td>
+			<td colspan="2"></td>
+			
+			<td>{{ usage.summary.charge_summary|floatformat:2|default:'-' }}</td>
+		</tr>
+		</tfoot>
+		
+	</table>
+	</div>
 </div>

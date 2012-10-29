@@ -1,11 +1,10 @@
-import logging
-
 from django.template import defaultfilters
 from django.utils.translation import ugettext_lazy as _
+from horizon import api, messages, tables
+from horizon.models import bills as billsdb
+import logging
 
-from horizon import api
-from horizon import messages
-from horizon import tables
+
 
 
 LOG = logging.getLogger(__name__)
@@ -32,52 +31,49 @@ class CreateBillLink(tables.LinkAction):
         return False
 
 class DeleteBillsAction(tables.DeleteAction):
-    data_type_singular = _("User")
-    data_type_plural = _("Users")
+    data_type_singular = _("Bill")
+    data_type_plural = _("Bills")
 
     def allowed(self, request, datum):
-        if not api.keystone_can_edit_user() or \
-                (datum and datum.id == request.user.id):
+        if not api.keystone_can_edit_user():
             return False
         return True
 
     def delete(self, request, obj_id):
-        api.keystone.user_delete(request, obj_id)
+       billsdb.objects.filter(id=obj_id).update(deleted=True)
 
 class ToggleEnabled(tables.BatchAction):
-    name = "enable"
+    name = "enabled"
     action_present = (_("Enable"), _("Disable"))
     action_past = (_("Enabled"), _("Disabled"))
-    data_type_singular = _("User")
-    data_type_plural = _("Users")
+    data_type_singular = _("Bill")
+    data_type_plural = _("Bills")
     classes = ("btn-enable",)
 
-    def allowed(self, request, user=None):
+    def allowed(self, request, bill=None):
         self.enabled = True
-        if not user:
+        if not bill:
             return self.enabled
-        self.enabled = user.enabled
+        self.enabled = bill.enabled
         if self.enabled:
+           # bills.objects.filter(id=bill.id).update(enabled=False)
             self.current_present_action = DISABLE
         else:
+           # bills.objects.filter(id=bill.id).update(enabled=True)
             self.current_present_action = ENABLE
         return True
 
-    def update(self, request, user=None):
-        super(ToggleEnabled, self).update(request, user)
-        if user and user.id == request.user.id:
-            self.attrs["disabled"] = "disabled"
+    #def update(self, request, bill=None):
+        #super(ToggleEnabled, self).update(request, bill)
+        #if bill and bill.id == request.bill.id:
+        #    self.attrs["disabled"] = "disabled"
 
     def action(self, request, obj_id):
-        if obj_id == request.user.id:
-            messages.info(request, _('You cannot disable the user you are '
-                                     'currently logged in as.'))
-            return
         if self.enabled:
-            api.keystone.user_update_enabled(request, obj_id, False)
+            billsdb.objects.filter(id=obj_id).update(enabled=True)
             self.current_past_action = DISABLE
         else:
-            api.keystone.user_update_enabled(request, obj_id, True)
+            billsdb.objects.filter(id=obj_id).update(enabled=False)
             self.current_past_action = ENABLE
 
 
@@ -86,7 +82,7 @@ class BillTable(tables.DataTable):
         ("true", True),
         ("false", False)
     )
-    id = tables.Column('id', verbose_name=_('ID'))
+    id = tables.Column('id', verbose_name=_('Bill ID'))
     name = tables.Column('name', verbose_name=_('Name'))
     payment_type=tables.Column('payment_type',verbose_name=_('Payment Type'))
     order_unit =tables.Column('order_unit',verbose_name=_('Order Unit'))
@@ -98,7 +94,7 @@ class BillTable(tables.DataTable):
                             empty_value="False")
 
     class Meta:
-        name = "bills"
+        name = "Bill"
         verbose_name = _("Bills")
-        row_actions = (EditBillLink, ToggleEnabled, DeleteBillsAction)
+        row_actions = (EditBillLink,ToggleEnabled, DeleteBillsAction)
         table_actions = (CreateBillLink,DeleteBillsAction,)

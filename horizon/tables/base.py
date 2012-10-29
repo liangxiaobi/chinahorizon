@@ -779,7 +779,7 @@ class DataTableOptions(object):
 
 class DataTableMetaclass(type):
     """ Metaclass to add options to DataTable class and collect columns. """
-    def __new__(self,mcs, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         # Process options from Meta
         class_name = name
         attrs["_meta"] = opts = DataTableOptions(attrs.get("Meta", None))

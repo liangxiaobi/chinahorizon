@@ -89,8 +89,8 @@ class bill_purchases(models.Model):
     
 class bills(models.Model):
     name = models.CharField(max_length=200)
-    create_at=models.DateTimeField(auto_now=True)
-    updated_at=models.DateTimeField(null=True)
+    create_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
     deleted_at=models.DateTimeField(null=True)
     deleted = models.BooleanField(default=False)
     region=models.CharField(max_length=200)
@@ -99,3 +99,23 @@ class bills(models.Model):
     order_size = models.IntegerField()
     price =models.FloatField()
     enabled=models.BooleanField(default=True)
+
+class bill_users(models.Model):
+    username = models.CharField(max_length=200,unique=True)
+    create_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    deleted_at=models.DateTimeField(null=True)
+    deleted = models.BooleanField(default=False)
+    password=models.CharField(max_length=200)
+    email=models.CharField(max_length=200)
+    company=models.CharField(max_length=200)
+    real_name=models.CharField(max_length=200)
+    ID_Card=models.CharField(max_length=200)
+    mobile=models.CharField(max_length=200)
+    qq=models.CharField(max_length=200,blank=True,null=True)
+    account=models.FloatField(default=0.00,null=True)
+    enabled=models.BooleanField(default=True)
+    
+    
+    
+    

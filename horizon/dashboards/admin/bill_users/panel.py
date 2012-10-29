@@ -1,5 +1,9 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
+# Copyright 2012 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
 # Copyright 2012 Nebula, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -17,21 +21,12 @@
 from django.utils.translation import ugettext_lazy as _
 
 import horizon
+from horizon.dashboards.admin import dashboard
 
 
-class SystemPanels(horizon.PanelGroup):
-    slug = "admin"
-    name = _("System Panel")
-    panels = ('overview', 'instances', 'volumes', 'services', 'flavors',
-              'images', 'projects', 'users', 'quotas', 'networks','bill','bill_users')
+class Users(horizon.Panel):
+    name = _("Bill Users")
+    slug = 'bill_users'
 
 
-class Admin(horizon.Dashboard):
-    name = _("Admin")
-    slug = "admin"
-    panels = (SystemPanels,)
-    default_panel = 'overview'
-    permissions = ('openstack.roles.admin',)
-
-
-horizon.register(Admin)
+dashboard.Admin.register(Users)

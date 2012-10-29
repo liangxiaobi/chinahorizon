@@ -21,26 +21,20 @@
 #    under the License.
 
 from __future__ import absolute_import
-
-import logging
-
+from cinderclient.v1 import client as cinder_client
 from django.conf import settings
 from django.utils.translation import ugettext as _
-
-from cinderclient.v1 import client as cinder_client
-
-from novaclient.v1_1 import client as nova_client
-from novaclient.v1_1 import security_group_rules as nova_rules
-from novaclient.v1_1.security_groups import SecurityGroup as NovaSecurityGroup
-from novaclient.v1_1.servers import REBOOT_HARD
-
 from horizon import exceptions
 from horizon.api.base import APIResourceWrapper, APIDictWrapper, url_for
+from horizon.models import bills
 from horizon.utils.memoized import memoized
-
+from novaclient.v1_1 import client as nova_client, \
+    security_group_rules as nova_rules
+from novaclient.v1_1.security_groups import SecurityGroup as NovaSecurityGroup
+from novaclient.v1_1.servers import REBOOT_HARD
+import logging
 
 LOG = logging.getLogger(__name__)
-
 
 # API static values
 INSTANCE_ACTIVE_STATE = 'ACTIVE'
@@ -124,11 +118,31 @@ class Usage(APIResourceWrapper):
     def get_summary(self):
         return {'instances': self.total_active_instances,
                 'memory_mb': self.memory_mb,
+                'memory_gb_hours':self.memory_gb_hours,
                 'vcpus': getattr(self, "total_vcpus_usage", 0),
                 'vcpu_hours': self.vcpu_hours,
                 'local_gb': self.local_gb,
-                'disk_gb_hours': self.disk_gb_hours}
-
+                'disk_gb_hours': self.disk_gb_hours,
+                'vcpu_bill':self.vcpu_bill,
+                'memory_bill':self.memory_bill,
+                'disk_bill':self.disk_bill,
+                'vcpu_charge':self.get_vcpu_charge(),
+                'memory_charge':self.get_memory_charge(),
+                'disk_charge':self.get_disk_charge(),
+                'charge_summary':self.get_charge_summary(),
+                }
+    def get_vcpu_charge(self):
+        return self.vcpu_bill*self.vcpu_hours
+    
+    def get_memory_charge(self):
+        return self.memory_bill*self.memory_gb_hours
+    
+    def get_disk_charge(self):
+        return self.disk_bill*self.disk_gb_hours
+    
+    def get_charge_summary(self):
+        return self.get_vcpu_charge()+self.get_memory_charge()+self.get_disk_charge()
+    
     @property
     def total_active_instances(self):
         return sum(1 for s in self.server_usages if s['ended_at'] is None)
@@ -151,11 +165,29 @@ class Usage(APIResourceWrapper):
     def memory_mb(self):
         return sum(s['memory_mb'] for s in self.server_usages
                    if s['ended_at'] is None)
+    @property
+    def memory_gb_hours(self):
+        vcpus=self.vcpus
+        if(vcpus>0):
+            return self.vcpu_hours*self.memory_mb/1024/vcpus
+        else:
+            return 0
 
     @property
     def disk_gb_hours(self):
         return getattr(self, "total_local_gb_usage", 0)
-
+    
+    @property
+    def vcpu_bill(self):
+        return bills.objects.get(name='VCPU',payment_type='hour').price
+    
+    @property
+    def memory_bill(self):
+        return bills.objects.get(name='Memory',payment_type='hour').price
+    
+    @property
+    def disk_bill(self):
+        return bills.objects.get(name='Disk',payment_type='hour').price
 
 class SecurityGroup(APIResourceWrapper):
     """Wrapper around novaclient.security_groups.SecurityGroup which wraps its
