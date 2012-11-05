@@ -19,20 +19,19 @@
 #    under the License.
 
 from .forms import CreateUserForm, UpdateUserForm
-from .tables import UsersTable
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.debug import sensitive_post_parameters
 from horizon import api, exceptions, forms, tables
+from horizon.dashboards.admin.bill_users.tables import BillUsersTable
 from horizon.models import bill_users
-import operator
 
 
 
 
 class IndexView(tables.DataTableView):
-    table_class = UsersTable
+    table_class = BillUsersTable
     template_name = 'admin/bill_users/index.html'
 
     def get_data(self):

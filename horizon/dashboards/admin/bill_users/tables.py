@@ -13,7 +13,7 @@ ENABLE = 0
 DISABLE = 1
 
 
-class CreateUserLink(tables.LinkAction):
+class CreateBillUserLink(tables.LinkAction):
     name = "create"
     verbose_name = _("Create User")
     url = "horizon:admin:bill_users:create"
@@ -25,7 +25,7 @@ class CreateUserLink(tables.LinkAction):
         return False
 
 
-class EditUserLink(tables.LinkAction):
+class EditBillUserLink(tables.LinkAction):
     name = "edit"
     verbose_name = _("Edit")
     url = "horizon:admin:bill_users:update"
@@ -65,22 +65,23 @@ class ToggleEnabled(tables.BatchAction):
             self.current_past_action = ENABLE
 
 
-class DeleteUsersAction(tables.DeleteAction):
-    data_type_singular = _("User")
-    data_type_plural = _("Users")
-
+class DeleteBillUsersAction(tables.DeleteAction):
+    data_type_singular = _("Bill_User")
+    data_type_plural = _("Bill_Users")
+    logging.info("DeleteBillUserAction")
+    
     def allowed(self, request, datum):
-        if not api.keystone_can_edit_user() or \
-                (datum and datum.id == request.user.id):
+        if datum and datum.username == "admin":
             return False
         return True
 
     def delete(self, request, obj_id):
-        api.keystone.user_delete(request, obj_id)
+        logging.info("delete is processed"+obj_id)
+        bill_users.objects.filter(id=obj_id).delete()
 
 
-class UserFilterAction(tables.FilterAction):
-    def filter(self, table, users, filter_string):
+class BillUserFilterAction(tables.FilterAction):
+    def filter(self, table, bill_users, filter_string):
         """ Really naive case-insensitive search. """
         # FIXME(gabriel): This should be smarter. Written for demo purposes.
         q = filter_string.lower()
@@ -91,10 +92,10 @@ class UserFilterAction(tables.FilterAction):
                 return True
             return False
 
-        return filter(comp, users)
+        return filter(comp, bill_users)
 
 
-class UsersTable(tables.DataTable):
+class BillUsersTable(tables.DataTable):
     STATUS_CHOICES = (
         ("true", True),
         ("false", False)
@@ -112,7 +113,7 @@ class UsersTable(tables.DataTable):
                             status_choices=STATUS_CHOICES,
                             empty_value="False")
     class Meta:
-        name = "users"
-        verbose_name = _("Users")
-        row_actions = (EditUserLink, ToggleEnabled, DeleteUsersAction)
-        table_actions = (UserFilterAction, CreateUserLink, DeleteUsersAction)
+        name = "bill_users"
+        verbose_name = _("Bill_Users")
+        row_actions = (DeleteBillUsersAction,EditBillUserLink, ToggleEnabled)
+        table_actions = (BillUserFilterAction, CreateBillUserLink, DeleteBillUsersAction)
